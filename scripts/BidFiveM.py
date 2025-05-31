@@ -198,6 +198,7 @@ def lambda_handler(event, context):
                 if message != '':
                     message = message[:-2]
                     result = webhook.send_text(message)
+                    print(f"关键词：{keyword}\n消息详情：{message}")
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
                 else:
                     continue
