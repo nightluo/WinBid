@@ -2,7 +2,6 @@ name: Run Python Script
 on:
   schedule:
     - cron: '0,10,20,30,40,50 * * * *'
-      timezone: 'Asia/Shanghai'
   workflow_dispatch:  # 允许手动触发
 env:
   TZ: Asia/Shanghai  # 设置时区
