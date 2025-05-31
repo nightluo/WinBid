@@ -3,19 +3,36 @@ on:
   schedule:
     # 每5分钟运行一次（UTC时间）
     - cron: '*/5 * * * *'
+  workflow_dispatch:  # 允许手动触发
 jobs:
   execute:
     runs-on: ubuntu-latest  # 必须使用Linux环境
+    env:
+      TZ: Asia/Shanghai  # 设置时区
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
+        
     - name: Install dependencies
-      run: pip install requests
+      run: |
+        pip install requests beautifulsoup4
+        pip freeze > requirements.txt  # 生成依赖清单
+        
     - name: Run Python script
       env:
         BID_SECRET: ${{ secrets.BID_TEST }} 
       run: python scripts/BidFiveM.py
+    
+    - name: Archive logs
+      if: always()  # 无论成功失败都执行
+      uses: actions/upload-artifact@v3
+      with:
+        name: execution-logs
+        path: |
+          *.log
+          requirements.txt
