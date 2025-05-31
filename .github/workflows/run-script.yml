@@ -1,7 +1,7 @@
 name: Run Python Script
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 */3 * * *'
   workflow_dispatch:  # 允许手动触发
   repository_dispatch:  # 外部API触发
 env:
