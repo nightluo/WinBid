@@ -1,0 +1,17 @@
+name: Run Python Script
+on:
+  schedule:
+    # 每5分钟运行一次（UTC时间）
+    - cron: '*/5 * * * *'
+jobs:
+  execute:
+    runs-on: ubuntu-latest  # 必须使用Linux环境
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Run script
+      run: python your_script.py  # 替换为你的脚本路径
