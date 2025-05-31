@@ -16,7 +16,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # 正式版
-key = "e36d9f43-4442-48d8-b864-18a084a85840"
+# key = "e36d9f43-4442-48d8-b864-18a084a85840"
 
 # 测试版
 key = "04c30c93-6d63-4f65-b58b-8ad649dcdb54"
@@ -187,6 +187,8 @@ def lambda_handler(event, context):
         
         start_time = beijing_time - timedelta(hours=24)
 
+        send_test = webhook.send_text(f"start_time: {start_time}")
+        
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
         for keyword in keyword_list:
             result_1 = ct_search(keyword, start_time)
