@@ -1,8 +1,8 @@
 name: Run Python Script
 on:
   schedule:
-    # 每5分钟运行一次（UTC时间）
-    - cron: '*/5 * * * *'
+    - cron: '0,10,20,30,40,50 * * * *'
+      timezone: 'Asia/Shanghai'
 env:
   TZ: Asia/Shanghai  # 设置时区
 jobs:
@@ -11,6 +11,12 @@ jobs:
     steps:
     - name: Check time
       run: date # 输出当前时间，应为北京时间
+
+    - name: Log execution time
+      run: |
+        echo "计划执行时间: ${{ github.event.schedule }}"
+        echo "实际北京时间: $(TZ='Asia/Shanghai' date)"
+    
     - name: Checkout code
       uses: actions/checkout@v4
       
