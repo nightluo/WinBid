@@ -2,7 +2,7 @@ name: Run Python Script
 on:
   schedule:
     # 每5分钟运行一次（UTC时间）
-    - cron: '0 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:  # 允许手动触发
 env:
   TZ: Asia/Shanghai  # 设置时区
