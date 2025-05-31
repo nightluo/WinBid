@@ -33,8 +33,7 @@ jobs:
       with:
         name: execution-logs
         path: |
-          *.log
-          scripts/output/
+          scripts/output/*.log
           requirements.txt
           
     - name: Cache artifact upload
