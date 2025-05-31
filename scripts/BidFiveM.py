@@ -177,13 +177,13 @@ def lambda_handler(event, context):
 
         utc_now = datetime.now(timezone.utc)
         beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))        
-        end_time = beijing_time + timedelta(minutes=10)
+        end_time = beijing_time + timedelta(minutes=60)
         send_test = webhook.send_text(f"重启，必胜！\n {beijing_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
         bid_total = []
         while beijing_time <= end_time:
-            start_time = beijing_time - timedelta(days=2)
+            start_time = beijing_time - timedelta(minutes=10)
             send_test = webhook.send_text(f"start_time: {start_time}")
             for keyword in keyword_list:
                 result_1 = ct_search(keyword, start_time)
