@@ -40,5 +40,9 @@ jobs:
     - name: Cache artifact upload
       uses: actions/upload-artifact@v4
       with:
+        name: artifact               # 产物名称
+        path: |                      # ✅ 必需参数（添加此项）
+          scripts/output/*.log       # 日志文件路径
         retention-days: 3  # 自动清理旧日志（减少存储消耗）
         compression-level: 9  # 最高压缩比
+        if-no-files-found: warn      # 无文件时警告
