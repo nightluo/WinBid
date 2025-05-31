@@ -1,7 +1,7 @@
 name: Run Python Script
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '45,46,47,48,49,50,51,52,53,10,20,30,40 * * * *'
   workflow_dispatch:  # 允许手动触发
 env:
   TZ: Asia/Shanghai  # 设置时区
