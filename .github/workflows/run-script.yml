@@ -5,7 +5,7 @@ on:
     - cron: '0 * * * *'
   workflow_dispatch:  # 允许手动触发
 env:
-      TZ: Asia/Shanghai  # 设置时区
+  TZ: Asia/Shanghai  # 设置时区
 jobs:
   execute:
     runs-on: ubuntu-latest  # 必须使用Linux环境
