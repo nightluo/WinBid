@@ -8,12 +8,35 @@ import re
 import io
 import sys
 import time
+from logging.handlers import RotatingFileHandler
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+# 确保日志目录存在
+log_dir = "scripts/output"
+os.makedirs(log_dir, exist_ok=True)  # 自动创建目录
 
 # 配置日志
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+# 创建文件处理器（输出到scripts/output/bid_log.log）
+log_file = os.path.join(log_dir, "bid_log.log")
+file_handler = logging.FileHandler(log_file, encoding='utf-8')
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(file_handler)
+
+# 保留控制台输出（可选）
+console_handler = logging.StreamHandler()
+logger.addHandler(console_handler)
+
+# 替换FileHandler为RotatingFileHandler（保留3个备份，每个10MB）
+file_handler = RotatingFileHandler(
+    log_file, 
+    maxBytes=10 * 1024 * 1024,  # 10MB
+    backupCount=3,
+    encoding='utf-8'
+)
 
 key = os.getenv("BID_SECRET")
 
@@ -179,12 +202,14 @@ def lambda_handler(event, context):
         beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))        
         end_time = beijing_time + timedelta(minutes=60)
         send_test = webhook.send_text(f"重启，必胜！\n {beijing_time}")
+        print(f"重启，必胜！\n {beijing_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
         bid_total = []
         while beijing_time <= end_time:
             start_time = beijing_time - timedelta(minutes=10)
             send_test = webhook.send_text(f"start_time: {start_time}")
+            print(f"start_time: {start_time}")
             for keyword in keyword_list:
                 result_1 = ct_search(keyword, start_time)
                 result_2 = tower_search(keyword, start_time)
@@ -206,6 +231,7 @@ def lambda_handler(event, context):
 
         now_time = beijing_time.strftime("%Y-%m-%d %H:%M:%S")
         time_send = webhook.send_text(f"归零，更新！\n{now_time}")
+        print(f"归零，更新！\n{now_time}")
     
     except Exception as e:
         logger.error(f"全局异常: {str(e)}")
