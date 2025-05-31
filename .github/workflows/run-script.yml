@@ -29,10 +29,16 @@ jobs:
       run: python scripts/BidFiveM.py
     
     - name: Archive logs
-      if: always()  # 无论成功失败都执行
       uses: actions/upload-artifact@v3
       with:
         name: execution-logs
         path: |
           *.log
+          scripts/output/
           requirements.txt
+          
+    - name: Cache artifact upload
+      uses: actions/upload-artifact@v3
+      with:
+        retention-days: 3  # 自动清理旧日志（减少存储消耗）
+        compression-level: 9  # 最高压缩比
