@@ -202,14 +202,14 @@ def lambda_handler(event, context):
         beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))        
         end_time = beijing_time + timedelta(minutes=60)
         send_test = webhook.send_text(f"重启，必胜！\n {beijing_time}")
-        print(f"重启，必胜！\n {beijing_time}")
+        logger.info(f"重启，必胜！\n {beijing_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
         bid_total = []
         while beijing_time <= end_time:
             start_time = beijing_time - timedelta(minutes=10)
             send_test = webhook.send_text(f"start_time: {start_time}")
-            print(f"start_time: {start_time}")
+            logger.info(f"start_time: {start_time}")
             for keyword in keyword_list:
                 result_1 = ct_search(keyword, start_time)
                 result_2 = tower_search(keyword, start_time)
@@ -223,7 +223,7 @@ def lambda_handler(event, context):
                 if message != '':
                     message = message[:-2]
                     result = webhook.send_text(message)
-                    print(f"关键词：{keyword}\n消息详情：{message}")
+                    logger.info(f"关键词：{keyword}\n消息详情：{message}")
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
                 else:
                     continue
@@ -231,7 +231,7 @@ def lambda_handler(event, context):
 
         now_time = beijing_time.strftime("%Y-%m-%d %H:%M:%S")
         time_send = webhook.send_text(f"归零，更新！\n{now_time}")
-        print(f"归零，更新！\n{now_time}")
+        logger.info(f"归零，更新！\n{now_time}")
     
     except Exception as e:
         logger.error(f"全局异常: {str(e)}")
