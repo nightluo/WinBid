@@ -176,31 +176,35 @@ def lambda_handler(event, context):
         logger.info("【调试】Webhook初始化成功")
 
         utc_now = datetime.now(timezone.utc)
-        beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))
-        # today = beijing_time.date()
-        # start_time = datetime.combine(today, time(9, 0)).astimezone(timezone(timedelta(hours=8)))
-        # end_time = datetime.combine(today, time(18, 0)).astimezone(timezone(timedelta(hours=8)))
-        
-        start_time = beijing_time - timedelta(hours=24)
-
-        send_test = webhook.send_text(f"start_time: {start_time}")
+        beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))        
+        end_time = beijing_time + timedelta(minutes=10)
+        send_test = webhook.send_text(f"重启，必胜！\n {start_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
-        for keyword in keyword_list:
-            result_1 = ct_search(keyword, start_time)
-            result_2 = tower_search(keyword, start_time)
-            result = result_1 + result_2
+        bid_total = []
+        while beijing_time <= end_time:
+            start_time = beijing_time - timedelta(days=2)
+            send_test = webhook.send_text(f"start_time: {start_time}")
+            for keyword in keyword_list:
+                result_1 = ct_search(keyword, start_time)
+                result_2 = tower_search(keyword, start_time)
+                result = result_1 + result_2
+                message = ''
+                for msg in result:
+                    if msg not in bid_total:
+                        bid_total.append(msg)
+                        message = message + f"【标题】{msg['标题']}\n【类型】{msg['类型']}\n【链接】{msg['链接']}\n\n"
+                
+                if message != '':
+                    message = message[:-2]
+                    result = webhook.send_text(message)
+                    logger.info(f"【调试】发送结果: {json.dumps(result)}")
+                else:
+                    continue
+            beijing_time = datetime.now(timezone(timedelta(hours=8)))
 
-            message = ''
-            for msg in result:
-                message = message + f"【标题】{msg['标题']}\n【类型】{msg['类型']}\n【链接】{msg['链接']}\n\n"
-
-            if message != '':
-                message = message[:-2]
-                result = webhook.send_text(message)
-                logger.info(f"【调试】发送结果: {json.dumps(result)}")
-            else:
-                continue
+        now_time = beijing_time.strftime("%Y-%m-%d %H:%M:%S")
+        time_send = webhook.send_text(f"归零，更新！\n{now_time}")
     
     except Exception as e:
         logger.error(f"全局异常: {str(e)}")
