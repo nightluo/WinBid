@@ -64,7 +64,7 @@ class WeComWebhook:
             return {"errcode": -1, "errmsg": "请求异常"}
 
 class WeComWebhookTest:  
-    BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key_test}"
+    BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
     def __init__(self):
         self.webhook_key = key_test
         if not self.webhook_key:
