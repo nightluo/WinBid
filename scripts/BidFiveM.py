@@ -38,7 +38,8 @@ file_handler = RotatingFileHandler(
     encoding='utf-8'
 )
 
-key = os.getenv("BID_SECRET")
+key = os.getenv("BID_WIN")
+key_test = os.getenv("BID_TEST")
 
 class WeComWebhook:  
     BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
@@ -46,6 +47,28 @@ class WeComWebhook:
         self.webhook_key = key
         if not self.webhook_key:
             logger.error("未检测到环境变量 WECOM_WEBHOOK_KEY")
+            raise ValueError("缺失密钥")
+
+    def send_text(self, content: str) -> dict:
+        payload = {"msgtype": "text", "text": {"content": content}}
+        try:
+            response = requests.post(
+                self.BASE_URL.format(key=self.webhook_key),
+                json=payload,
+                timeout=8
+            )
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            logger.error(f"消息发送失败: {str(e)}")
+            return {"errcode": -1, "errmsg": "请求异常"}
+
+class WeComWebhookTest:  
+    BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key_test}"
+    def __init__(self):
+        self.webhook_key = key_test
+        if not self.webhook_key:
+            logger.error("未检测到环境变量 WECOM_WEBHOOK_KEY_TEST")
             raise ValueError("缺失密钥")
 
     def send_text(self, content: str) -> dict:
@@ -193,23 +216,21 @@ def tower_search(keyword, start_time):
 
 def lambda_handler(event, context):
     """Lambda入口函数"""
+    logger.info("【调试】函数开始执行")
+    webhook = WeComWebhook()
+    webhook_test = WeComWebhookTest()
+    logger.info("【调试】Webhook初始化成功")
     try:
-        logger.info("【调试】函数开始执行")
-        webhook = WeComWebhook()
-        logger.info("【调试】Webhook初始化成功")
-
         utc_now = datetime.now(timezone.utc)
         beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))        
-        # end_time = beijing_time + timedelta(minutes=240)
-        end_time = beijing_time + timedelta(hours=4)
-        send_test = webhook.send_text(f"重启，必胜！\n {beijing_time}")
+        end_time = beijing_time + timedelta(hours=5.5)
+        send_test = webhook_test.send_text(f"重启，必胜！\n {beijing_time}")
         logger.info(f"重启，必胜！\n {beijing_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
         bid_total = []
         while beijing_time <= end_time:
-            start_time = beijing_time - timedelta(minutes=30)
-            # send_test = webhook.send_text(f"start_time: {start_time}")
+            start_time = beijing_time - timedelta(minutes=15)
             logger.info(f"start_time: {start_time}")
             for keyword in keyword_list:
                 result_1 = ct_search(keyword, start_time)
@@ -231,13 +252,13 @@ def lambda_handler(event, context):
             beijing_time = datetime.now(timezone(timedelta(hours=8)))
 
         now_time = beijing_time.strftime("%Y-%m-%d %H:%M:%S")
-        time_send = webhook.send_text(f"归零，更新！\n{now_time}")
+        time_send = webhook_test.send_text(f"归零，更新！\n{now_time}")
         logger.info(f"归零，更新！\n{now_time}")
     
     except Exception as e:
         logger.error(f"全局异常: {str(e)}")
-        webhook = WeComWebhook()
         error_send = webhook.send_text(f"全局异常: {str(e)}")
+        error_send = webhook_test.send_text(f"全局异常: {str(e)}")
         return {
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
