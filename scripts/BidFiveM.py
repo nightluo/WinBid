@@ -247,6 +247,7 @@ def lambda_handler(event, context):
             start_time = beijing_time - timedelta(minutes=15)
             logger.info(f"start_time: {start_time}")
             for keyword in keyword_list:
+                time.sleep(5)
                 result_1 = ct_search(keyword, start_time)
                 result_2 = tower_search(keyword, start_time)
                 result = result_1 + result_2
@@ -264,7 +265,7 @@ def lambda_handler(event, context):
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
                 else:
                     continue
-            time.sleep(30)
+            time.sleep(5)
             beijing_time = datetime.now(timezone(timedelta(hours=8)))
 
         now_time = beijing_time.strftime("%Y-%m-%d %H:%M:%S")
