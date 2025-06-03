@@ -142,7 +142,7 @@ def ct_search(keyword, start_time):
                     break
 
         except requests.exceptions.HTTPError as e:
-            logger.error(f"API请求失败: 状态码 {response.status_code}, 响应内容: {response.text}")
+            logger.error(f"阳光采购网，API请求失败: 状态码 {response.status_code}, 响应内容: {response.text}")
             return None
     
     return bid_list
@@ -208,7 +208,7 @@ def tower_search(keyword, start_time):
                     break
 
         except requests.exceptions.HTTPError as e:
-            logger.error(f"API请求失败: 状态码 {response.status_code}, 响应内容: {response.text}")
+            logger.error(f"铁塔，API请求失败: 状态码 {response.status_code}, 响应内容: {response.text}")
             return None
         
     return bid_list
@@ -244,7 +244,7 @@ def lambda_handler(event, context):
                 
                 if message != '':
                     message = message[:-2]
-                    result = webhook.send_text(message)
+                    # result = webhook.send_text(message)
                     result_test = webhook_test.send_text(message)
                     logger.info(f"关键词：{keyword}\n消息详情：{message}")
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
