@@ -105,7 +105,7 @@ def ct_search(keyword, start_time):
         home_response.raise_for_status()
 
     except Exception as e:
-            logger.error(f"主页请求失败: {str(e)}")
+            logger.error(f"阳光采购网，主页请求失败: {str(e)}")
             return None
 
     headers = {
@@ -169,7 +169,7 @@ def tower_search(keyword, start_time):
         home_response.raise_for_status()
 
     except Exception as e:
-            logger.error(f"主页请求失败: {str(e)}")
+            logger.error(f"铁塔，主页请求失败: {str(e)}")
             return None
 
     headers = {
