@@ -9,6 +9,8 @@ import io
 import sys
 import time
 from logging.handlers import RotatingFileHandler
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -36,6 +38,14 @@ file_handler = RotatingFileHandler(
     maxBytes=10 * 1024 * 1024,  # 10MB
     backupCount=3,
     encoding='utf-8'
+)
+
+# 配置重试策略
+retry_strategy = Retry(
+    total=5,                              # 总尝试次数（含首次请求）[2,4](@ref)
+    backoff_factor=1,                     # 指数退避间隔：{backoff_factor} * 2^(n-1)秒[4,5](@ref)
+    status_forcelist=[500, 502, 503, 504],# 遇到这些状态码自动重试[3,5](@ref)
+    allowed_methods=["GET", "POST"]       # 仅对指定HTTP方法重试[4](@ref)
 )
 
 key = os.getenv("BID_WIN")
@@ -87,6 +97,8 @@ class WeComWebhookTest:
 
 def ct_search(keyword, start_time):
     session = requests.Session()
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("https://", adapter)
     home_url = "https://caigou.chinatelecom.com.cn"
     try:
         home_response = session.get(home_url)
@@ -149,6 +161,8 @@ def ct_search(keyword, start_time):
     
 def tower_search(keyword, start_time):
     session = requests.Session()
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("https://", adapter)
     home_url = "http://www.tower.com.cn/#/purAnnouncement?name=more&purchaseNoticeType=2&activeIndex=0"
     try:
         home_response = session.get(home_url)
