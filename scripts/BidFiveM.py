@@ -249,6 +249,7 @@ def lambda_handler(event, context):
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
                 else:
                     continue
+            sleep(30)
             beijing_time = datetime.now(timezone(timedelta(hours=8)))
 
         now_time = beijing_time.strftime("%Y-%m-%d %H:%M:%S")
