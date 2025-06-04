@@ -50,6 +50,7 @@ retry_strategy = Retry(
 
 key = os.getenv("BID_WIN")
 key_test = os.getenv("BID_TEST")
+key_ot = os.getenv("BID_OT")
 
 class WeComWebhook:  
     BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
@@ -95,6 +96,28 @@ class WeComWebhookTest:
             logger.error(f"消息发送失败: {str(e)}")
             return {"errcode": -1, "errmsg": "请求异常"}
 
+class WeComWebhookOT:  
+    BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
+    def __init__(self):
+        self.webhook_key = key_ot
+        if not self.webhook_key:
+            logger.error("未检测到环境变量 WECOM_WEBHOOK_KEY_TEST")
+            raise ValueError("缺失密钥")
+
+    def send_text(self, content: str) -> dict:
+        payload = {"msgtype": "text", "text": {"content": content}}
+        try:
+            response = requests.post(
+                self.BASE_URL.format(key=self.webhook_key),
+                json=payload,
+                timeout=60
+            )
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            logger.error(f"消息发送失败: {str(e)}")
+            return {"errcode": -1, "errmsg": "请求异常"}
+            
 def ct_search(keyword, start_time):
     session = requests.Session()
     adapter = HTTPAdapter(max_retries=retry_strategy)
@@ -233,12 +256,14 @@ def lambda_handler(event, context):
     logger.info("【调试】函数开始执行")
     webhook = WeComWebhook()
     webhook_test = WeComWebhookTest()
+    webhook_ot = WeComWebhookOT()
     logger.info("【调试】Webhook初始化成功")
     try:
         utc_now = datetime.now(timezone.utc)
         beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))        
         end_time = beijing_time + timedelta(hours=5.5)
         send_test = webhook_test.send_text(f"重启，必胜！\n {beijing_time}")
+        send_ot = webhook_ot.send_text(f"测试消息！\n {beijing_time}")
         logger.info(f"重启，必胜！\n {beijing_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
@@ -261,6 +286,7 @@ def lambda_handler(event, context):
                     message = message[:-2]
                     result = webhook.send_text(message)
                     result_test = webhook_test.send_text(message)
+                    result_ot = webhook_ot.send_text(message)
                     logger.info(f"关键词：{keyword}\n消息详情：{message}")
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
                 else:
