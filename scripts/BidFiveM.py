@@ -263,7 +263,7 @@ def lambda_handler(event, context):
         beijing_time = utc_now.astimezone(timezone(timedelta(hours=8)))        
         end_time = beijing_time + timedelta(hours=5.5)
         send_test = webhook_test.send_text(f"重启，必胜！\n {beijing_time}")
-        send_ot = webhook_ot.send_text(f"测试消息！\n {beijing_time}")
+        # send_ot = webhook_ot.send_text(f"测试消息！\n {beijing_time}")
         logger.info(f"重启，必胜！\n {beijing_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务"]
