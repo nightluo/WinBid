@@ -35,6 +35,7 @@ jobs:
       env:
         BID_TEST: ${{ secrets.BID_TEST }} 
         BID_WIN: ${{ secrets.BID_WIN }} 
+        BID_OT: ${{ secrets.BID_OT }} 
       run: python scripts/BidFiveM.py
     
     - name: Archive logs
