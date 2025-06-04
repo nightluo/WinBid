@@ -266,7 +266,7 @@ def lambda_handler(event, context):
         # send_ot = webhook_ot.send_text(f"测试消息！\n {beijing_time}")
         logger.info(f"重启，必胜！\n {beijing_time}")
         
-        keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务", "训战"]
+        keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战"]
         bid_total = []
         while beijing_time <= end_time:
             start_time = beijing_time - timedelta(minutes=15)
