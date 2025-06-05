@@ -256,7 +256,7 @@ def lambda_handler(event, context):
     logger.info("【调试】函数开始执行")
     webhook = WeComWebhook()
     webhook_test = WeComWebhookTest()
-    webhook_ot = WeComWebhookOT()
+    # webhook_ot = WeComWebhookOT()
     logger.info("【调试】Webhook初始化成功")
     try:
         utc_now = datetime.now(timezone.utc)
@@ -285,7 +285,7 @@ def lambda_handler(event, context):
                     message = message[:-2]
                     result = webhook.send_text(message)
                     result_test = webhook_test.send_text(message)
-                    result_ot = webhook_ot.send_text(message)
+                    # result_ot = webhook_ot.send_text(message)
                     logger.info(f"关键词：{keyword}\n消息详情：{message}")
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
                 else:
