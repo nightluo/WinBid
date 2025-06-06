@@ -13,7 +13,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 # keyword_list = ["培训", "竞赛", "赋能", "会务", "营销"]
-keyword_list = ["交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
+keyword_list = ["培训", "竞赛", "赋能", "会务", "营销", "交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
 not_list = ["会议室", "会议终端设备", "会议系统", "租赁"]
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
