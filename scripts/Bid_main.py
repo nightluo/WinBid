@@ -12,9 +12,15 @@ from logging.handlers import RotatingFileHandler
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-keyword_list = ["培训", "竞赛", "赋能", "会务", "营销"]
-# keyword_list = ["交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
-not_list = ["会议室", "会议终端设备", "会议系统", "租赁"]
+key = os.getenv("BID_WIN")
+# key_test = os.getenv("BID_TEST")
+# key_ot = os.getenv("BID_OT")
+keyword_list = os.getenv("KEY_MAIN")
+not_list = os.getenv("KEY_NOT")
+
+# keyword_list = ["培训", "竞赛", "赋能", "会务", "营销"]
+# # keyword_list = ["交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
+# not_list = ["会议室", "会议终端设备", "会议系统", "租赁"]
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -51,10 +57,6 @@ retry_strategy = Retry(
     status_forcelist=[500, 502, 503, 504],# 遇到这些状态码自动重试[3,5](@ref)
     allowed_methods=["GET", "POST"]       # 仅对指定HTTP方法重试[4](@ref)
 )
-
-key = os.getenv("BID_WIN")
-# key_test = os.getenv("BID_TEST")
-# key_ot = os.getenv("BID_OT")
 
 class WeComWebhook:  
     BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
