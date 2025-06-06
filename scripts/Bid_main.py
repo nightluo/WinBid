@@ -60,6 +60,7 @@ retry_strategy = Retry(
     allowed_methods=["GET", "POST"]       # 仅对指定HTTP方法重试[4](@ref)
 )
 
+logger.info(f"key：{key}")
 logger.info(f"keyword_list：{keyword_list}")
 logger.info(f"not_list：{not_list}")
 
