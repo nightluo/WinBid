@@ -272,7 +272,7 @@ def lambda_handler(event, context):
         
         bid_total = []
         while beijing_time <= end_time:
-            start_time = beijing_time - timedelta(minutes=30)
+            start_time = beijing_time - timedelta(minutes=300)
             logger.info(f"start_time: {start_time}")
             for keyword in keyword_list:
                 result_1 = ct_search(keyword, start_time)
@@ -281,8 +281,8 @@ def lambda_handler(event, context):
                 message = ''
                 for msg in result:
                     if msg not in bid_total:
-                        if any(notword in msg for notword in not_list):
-                            logger.info(f"notword：{notword}\n msg：{msg}")
+                        if any(notword in msg['标题'] for notword in not_list):
+                            logger.info(f"notword：{notword}\n msg['标题']：{msg['标题']}")
                             continue
                         else:
                             bid_total.append(msg)
