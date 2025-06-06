@@ -34,7 +34,9 @@ jobs:
     - name: Run Python script
       env:
         BID_WIN: ${{ secrets.BID_WIN }} 
-        BID_TEST: ${{ secrets.BID_TEST }} 
+        KEY_MAIN: ${{ secrets.KEY_MAIN }} 
+        KEY_OTHERS: ${{ secrets.KEY_OTHERS }} 
+        KEY_NOT: ${{ secrets.KEY_NOT }} 
       run: python scripts/Bid_main.py
     
     - name: Archive logs
