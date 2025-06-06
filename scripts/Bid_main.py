@@ -282,7 +282,7 @@ def lambda_handler(event, context):
                 for msg in result:
                     if msg not in bid_total:
                         if any(notword in msg['标题'] for notword in not_list):
-                            logger.info(f"notword：{notword}\n msg['标题']：{msg['标题']}")
+                            logger.info(f"msg['标题']：{msg['标题']}")
                             continue
                         else:
                             bid_total.append(msg)
