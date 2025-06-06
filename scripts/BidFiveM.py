@@ -256,7 +256,7 @@ def lambda_handler(event, context):
     logger.info("【调试】函数开始执行")
     webhook = WeComWebhook()
     webhook_test = WeComWebhookTest()
-    webhook_ot = WeComWebhookOT()
+    # webhook_ot = WeComWebhookOT()
     logger.info("【调试】Webhook初始化成功")
     try:
         utc_now = datetime.now(timezone.utc)
@@ -267,6 +267,7 @@ def lambda_handler(event, context):
         logger.info(f"重启，必胜！\n {beijing_time}")
         
         keyword_list = ["培训", "竞赛", "赋能", "会务", "交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "营销", "服务支撑", "服务提质", "客户价值提升"]
+        not_list = ["会议室", "会议终端设备", "会议系统", "租赁"]
         bid_total = []
         while beijing_time <= end_time:
             start_time = beijing_time - timedelta(minutes=15)
@@ -278,14 +279,17 @@ def lambda_handler(event, context):
                 message = ''
                 for msg in result:
                     if msg not in bid_total:
-                        bid_total.append(msg)
-                        message = message + f"【标题】{msg['标题']}\n【类型】{msg['类型']}\n【链接】{msg['链接']}\n\n"
+                        if any(notword in msg for notword in not_list):
+                            continue
+                        else：
+                            bid_total.append(msg)
+                            message = message + f"【标题】{msg['标题']}\n【类型】{msg['类型']}\n【链接】{msg['链接']}\n\n"
                 
                 if message != '':
                     message = message[:-2]
                     result = webhook.send_text(message)
-                    result_test = webhook_test.send_text(message)
-                    result_ot = webhook_ot.send_text(message)
+                    # result_test = webhook_test.send_text(message)
+                    # result_ot = webhook_ot.send_text(message)
                     logger.info(f"关键词：{keyword}\n消息详情：{message}")
                     logger.info(f"【调试】发送结果: {json.dumps(result)}")
                 else:
