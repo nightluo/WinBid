@@ -13,7 +13,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 # keyword_list = ["培训", "竞赛", "赋能", "会务", "营销"]
-keyword_list = ["培训", "竞赛", "赋能", "会务", "营销", "交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
+keyword_list = ["交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
 not_list = ["会议室", "会议终端设备", "会议系统", "租赁"]
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -78,27 +78,27 @@ class WeComWebhook:
             logger.error(f"消息发送失败: {str(e)}")
             return {"errcode": -1, "errmsg": "请求异常"}
 
-# class WeComWebhookTest:  
-#     BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
-#     def __init__(self):
-#         self.webhook_key = key_test
-#         if not self.webhook_key:
-#             logger.error("未检测到环境变量 WECOM_WEBHOOK_KEY_TEST")
-#             raise ValueError("缺失密钥")
+class WeComWebhookTest:  
+    BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
+    def __init__(self):
+        self.webhook_key = key_test
+        if not self.webhook_key:
+            logger.error("未检测到环境变量 WECOM_WEBHOOK_KEY_TEST")
+            raise ValueError("缺失密钥")
 
-#     def send_text(self, content: str) -> dict:
-#         payload = {"msgtype": "text", "text": {"content": content}}
-#         try:
-#             response = requests.post(
-#                 self.BASE_URL.format(key=self.webhook_key),
-#                 json=payload,
-#                 timeout=60
-#             )
-#             response.raise_for_status()
-#             return response.json()
-#         except Exception as e:
-#             logger.error(f"消息发送失败: {str(e)}")
-#             return {"errcode": -1, "errmsg": "请求异常"}
+    def send_text(self, content: str) -> dict:
+        payload = {"msgtype": "text", "text": {"content": content}}
+        try:
+            response = requests.post(
+                self.BASE_URL.format(key=self.webhook_key),
+                json=payload,
+                timeout=60
+            )
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            logger.error(f"消息发送失败: {str(e)}")
+            return {"errcode": -1, "errmsg": "请求异常"}
 
 # class WeComWebhookOT:  
 #     BASE_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={key}"
@@ -281,7 +281,8 @@ def lambda_handler(event, context):
                 message = ''
                 for msg in result:
                     if msg not in bid_total:
-                        if any(notword in msg for notword in not_list):
+                        if any(notword in msg['标题'] for notword in not_list):
+                            logger.info(f"msg['标题']：{msg['标题']}")
                             continue
                         else:
                             bid_total.append(msg)
