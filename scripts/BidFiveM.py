@@ -281,7 +281,7 @@ def lambda_handler(event, context):
                     if msg not in bid_total:
                         if any(notword in msg for notword in not_list):
                             continue
-                        else：
+                        else:
                             bid_total.append(msg)
                             message = message + f"【标题】{msg['标题']}\n【类型】{msg['类型']}\n【链接】{msg['链接']}\n\n"
                 
