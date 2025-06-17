@@ -175,7 +175,7 @@ def ct_search(keyword, start_time):
                     bid = {
                         "标题": list['docTitle'],
                         "类型": list['docType'],
-                        "链接":  f"{home_url}/DeclareDetails?id={list['docId']}&type={type_id}&docTypeCode={list['docTypeCode']}"
+                        "链接":  f"{home_url}/DeclareDetails?id={list['docId']}&type={type_id}&docTypeCode={list['docTypeCode']}&securityViewCode={list['securityViewCode']}"
                     }
                     bid_list.append(bid)
                 else:
