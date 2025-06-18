@@ -19,8 +19,8 @@ key = os.getenv("BID_WIN")
 # not_list = os.getenv("KEY_NOT")
 
 keyword_list = ["培训", "竞赛", "赋能", "会务", "营销"]
-# keyword_list = ["交流活动", "辅助服务", "训战", "会议", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
-not_list = ["会议室", "会议终端", "会议系统", "租赁", "设备采购", "投屏", "视频会议", "办公室", "材料"]
+# keyword_list = ["交流活动", "辅助服务", "训战", "会议活动", "会议服务", "会展", "论坛", "实战", "服务支撑", "服务提质", "客户价值提升", "训练营"]
+not_list = ["租赁", "设备采购", "办公室", "材料"]
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
